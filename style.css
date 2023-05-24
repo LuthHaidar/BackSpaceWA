@@ -7,7 +7,7 @@ canvas {
   display: block;
 }
 
-button {
+/* button {
   font-size: 16px;
   padding: 10px 20px;
   cursor: pointer;
@@ -20,4 +20,4 @@ button {
 
 button.pressed {
   transform: scale(0.9);
-}
+} */
