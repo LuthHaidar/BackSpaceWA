@@ -6,18 +6,3 @@ html, body {
 canvas {
   display: block;
 }
-
-/* button {
-  font-size: 16px;
-  padding: 10px 20px;
-  cursor: pointer;
-  border: 2px solid black;
-  background-color: black;
-  color: white;
-  border-radius: 2px;
-  transition: transform 30ms ease-in-out;
-}
-
-button.pressed {
-  transform: scale(0.9);
-} */
