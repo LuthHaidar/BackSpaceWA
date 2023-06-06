@@ -117,7 +117,7 @@ function setup() {
     upgrade.color = color(200, 200, 200);
 
     // User click upgrades
-    fasterTyping = new upgrade.Sprite(upgradesX, height/5);
+    fasterTyping = new upgrade.Sprite(upgradesX, height/6);
     fasterTyping.name = "TypeFaster";
     fasterTyping.price = 10;
     fasterTyping.priceMultiplier = 1.5;
@@ -130,7 +130,7 @@ function setup() {
         fasterTyping.locked = true;
     }
 
-    doublePress = new upgrade.Sprite(upgradesX, height/5 + (upgradesYIndent + upgradesH));
+    doublePress = new upgrade.Sprite(upgradesX, height/6 + (upgradesYIndent + upgradesH));
     doublePress.name = "DoublePress";
     doublePress.price = 150;
     doublePress.amt = 0;
@@ -142,7 +142,7 @@ function setup() {
         doublePress.locked = true;
     }
 
-    multitasking = new upgrade.Sprite(upgradesX, height/5 + 2 * (upgradesYIndent + upgradesH));
+    multitasking = new upgrade.Sprite(upgradesX, height/6 + 2 * (upgradesYIndent + upgradesH));
     multitasking.name = "Multitasking";
     multitasking.price = 500;
     multitasking.amt = 0;
@@ -154,8 +154,30 @@ function setup() {
         multitasking.locked = true;
     }
 
+    stickyKeys = new upgrade.Sprite(upgradesX, height/6 + 3 * (upgradesYIndent + upgradesH));
+    stickyKeys.name = "StickyKeys";
+    stickyKeys.price = 15
+    stickyKeys.desc = `+1 Auto Clicks per second \n Cost: ${stickyKeys.price} chars`;
+    stickyKeys.amt = 0;
+    stickyKeys.text = `${stickyKeys.name} x${stickyKeys.amt}`;
+    stickyKeys.click = function() {
+        autoClicksPerSecond += 1;
+        stickyKeys.amt++;
+    }
+
+    autoComplete = new upgrade.Sprite(upgradesX, height/6 + 4 * (upgradesYIndent + upgradesH));
+    autoComplete.name = "AutoComplete";
+    autoComplete.price = 50;
+    autoComplete.amt = 0;
+    autoComplete.desc = `+5 Auto Clicks\nCost: ${autoComplete.price} chars`;
+    autoComplete.text = `${autoComplete.name} x${autoComplete.amt}`
+    autoComplete.click = function() {
+        autoClicksPerSecond += 5;
+        autoComplete.amt++;
+    }
+
     // Autoclick upgrades
-    macro = new upgrade.Sprite(upgradesX, height/5 + 3 * (upgradesYIndent + upgradesH));
+    macro = new upgrade.Sprite(upgradesX, height/6 + 5 * (upgradesYIndent + upgradesH));
     macro.name = "Macro";
     macro.price = 1000;
     macro.desc = `+10 Auto Clicks per second \n Cost: ${macro.price} chars`;
@@ -166,7 +188,7 @@ function setup() {
         macro.amt++;
     }
 
-    pyGUI = new upgrade.Sprite(upgradesX, height/5 + 4 * (upgradesYIndent + upgradesH));
+    pyGUI = new upgrade.Sprite(upgradesX, height/6 + 6 * (upgradesYIndent + upgradesH));
     pyGUI.name = "pyGUI";
     pyGUI.price = 2000;
     pyGUI.amt = 0;
@@ -177,7 +199,7 @@ function setup() {
         pyGUI.amt++;
     }
 
-    unpaidIntern = new upgrade.Sprite(upgradesX, height/5 + 5 * (upgradesYIndent + upgradesH));
+    unpaidIntern = new upgrade.Sprite(upgradesX, height/6 + 7 * (upgradesYIndent + upgradesH));
     unpaidIntern.name = "UnpaidIntern";
     unpaidIntern.price = 50000;
     unpaidIntern.amt = 0;
@@ -188,7 +210,7 @@ function setup() {
         unpaidIntern.amt++;
     }
 
-    chatGPT = new upgrade.Sprite(upgradesX, height/5 + 6 * (upgradesYIndent + upgradesH));
+    chatGPT = new upgrade.Sprite(upgradesX, height/6 + 8 * (upgradesYIndent + upgradesH));
     chatGPT.name = "ChatGPT";
     chatGPT.price = 100000;
     chatGPT.amt = 0;
@@ -200,7 +222,7 @@ function setup() {
     }
 
     // Misc. upgrades
-    rageMode = new upgrade.Sprite(upgradesX, height/5 + 7 * (upgradesYIndent + upgradesH));
+    rageMode = new upgrade.Sprite(upgradesX, height/6 + 9 * (upgradesYIndent + upgradesH));
     rageMode.name = "Rage";
     rageMode.price = 500;
     rageMode.amt = 0;
@@ -212,7 +234,7 @@ function setup() {
         rageMode.locked = true;
     }
 
-    codeReview = new upgrade.Sprite(upgradesX, height/5 + 8 * (upgradesYIndent + upgradesH));
+    codeReview = new upgrade.Sprite(upgradesX, height/6 + 10 * (upgradesYIndent + upgradesH));
     codeReview.name = "CodeReview";
     codeReview.price = 100;
     codeReview.amt = 0;
