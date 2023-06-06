@@ -24,7 +24,7 @@ let rageModeChance = 0.1;
 let negativeEventChance = 0.05;
 
 // Variable to keep track of deleted characters
-var deletedChars = 0;
+var deletedChars = 50;
 
 // Variables for upgrades
 var autoClicksPerSecond = 0;
@@ -119,118 +119,119 @@ function setup() {
     // User click upgrades
     fasterTyping = new upgrade.Sprite(upgradesX, height/6);
     fasterTyping.name = "TypeFaster";
-    fasterTyping.price = 10;
-    fasterTyping.priceMultiplier = 1.5;
+    fasterTyping.price = 50;
     fasterTyping.amt = 0;
     fasterTyping.desc = `x2 User Clicks (One-Time Purchase)\nCost: ${fasterTyping.price} chars`;
     fasterTyping.text = `${fasterTyping.name} x${fasterTyping.amt}`;
     fasterTyping.click = function() {
         userClickMultiplier *= 2;
-        fasterTyping.amt++;
         fasterTyping.locked = true;
     }
 
     doublePress = new upgrade.Sprite(upgradesX, height/6 + (upgradesYIndent + upgradesH));
     doublePress.name = "DoublePress";
-    doublePress.price = 150;
+    doublePress.price = 300;
     doublePress.amt = 0;
     doublePress.desc = `x3 User Clicks (One-Time Purchase)\nCost: ${doublePress.price} chars`;
     doublePress.text = `${doublePress.name} x${doublePress.amt}`;
     doublePress.click = function() {
         userClickMultiplier *= 3;
-        doublePress.amt++;
         doublePress.locked = true;
     }
 
     multitasking = new upgrade.Sprite(upgradesX, height/6 + 2 * (upgradesYIndent + upgradesH));
     multitasking.name = "Multitasking";
-    multitasking.price = 500;
+    multitasking.price = 5000;
     multitasking.amt = 0;
     multitasking.desc = `x5 User Clicks (One-Time Purchase)\nCost: ${multitasking.price} chars`;
     multitasking.text = `${multitasking.name} x${multitasking.amt}`;
     multitasking.click = function() {
         userClickMultiplier *= 5;
-        multitasking.amt++;
         multitasking.locked = true;
     }
 
     stickyKeys = new upgrade.Sprite(upgradesX, height/6 + 3 * (upgradesYIndent + upgradesH));
     stickyKeys.name = "StickyKeys";
     stickyKeys.price = 15
+    stickyKeys.priceMultiplier = 1.6;
     stickyKeys.desc = `+1 Auto Clicks per second \n Cost: ${stickyKeys.price} chars`;
     stickyKeys.amt = 0;
     stickyKeys.text = `${stickyKeys.name} x${stickyKeys.amt}`;
     stickyKeys.click = function() {
         autoClicksPerSecond += 1;
-        stickyKeys.amt++;
+        stickyKeys.desc = `+1 Auto Clicks per second \n Cost: ${stickyKeys.price} chars`;
     }
 
     autoComplete = new upgrade.Sprite(upgradesX, height/6 + 4 * (upgradesYIndent + upgradesH));
     autoComplete.name = "AutoComplete";
     autoComplete.price = 50;
+    autoComplete.priceMultiplier = 1.5;
     autoComplete.amt = 0;
     autoComplete.desc = `+5 Auto Clicks\nCost: ${autoComplete.price} chars`;
     autoComplete.text = `${autoComplete.name} x${autoComplete.amt}`
     autoComplete.click = function() {
         autoClicksPerSecond += 5;
-        autoComplete.amt++;
+        autoComplete.desc = `+5 Auto Clicks\nCost: ${autoComplete.price} chars`;
     }
 
     // Autoclick upgrades
     macro = new upgrade.Sprite(upgradesX, height/6 + 5 * (upgradesYIndent + upgradesH));
     macro.name = "Macro";
     macro.price = 1000;
+    macro.priceMultiplier = 1.4;
     macro.desc = `+10 Auto Clicks per second \n Cost: ${macro.price} chars`;
     macro.amt = 0;
     macro.text = `${macro.name} x${macro.amt}`;
     macro.click = function() {
         autoClicksPerSecond += 10;
-        macro.amt++;
+        macro.desc = `+10 Auto Clicks per second \n Cost: ${macro.price} chars`;
     }
 
     pyGUI = new upgrade.Sprite(upgradesX, height/6 + 6 * (upgradesYIndent + upgradesH));
     pyGUI.name = "pyGUI";
     pyGUI.price = 2000;
+    pyGUI.priceMultiplier = 1.3;
     pyGUI.amt = 0;
     pyGUI.desc = `+25 Auto Clicks\nCost: ${pyGUI.price} chars`;
     pyGUI.text = `${pyGUI.name} x${pyGUI.amt}`
     pyGUI.click = function() {
         autoClicksPerSecond += 25;
-        pyGUI.amt++;
+        pyGUI.desc = `+25 Auto Clicks\nCost: ${pyGUI.price} chars`;
     }
 
     unpaidIntern = new upgrade.Sprite(upgradesX, height/6 + 7 * (upgradesYIndent + upgradesH));
     unpaidIntern.name = "UnpaidIntern";
     unpaidIntern.price = 50000;
+    unpaidIntern.priceMultiplier = 1.2;
     unpaidIntern.amt = 0;
     unpaidIntern.desc = `+50 Auto Clicks\nCost: ${unpaidIntern.price} chars`;
     unpaidIntern.text = `${unpaidIntern.name} x${unpaidIntern.amt}`
     unpaidIntern.click = function() {
         autoClicksPerSecond += 50;
-        unpaidIntern.amt++;
+        unpaidIntern.desc = `+50 Auto Clicks\nCost: ${unpaidIntern.price} chars`;
     }
 
     chatGPT = new upgrade.Sprite(upgradesX, height/6 + 8 * (upgradesYIndent + upgradesH));
     chatGPT.name = "ChatGPT";
     chatGPT.price = 100000;
+    chatGPT.priceMultiplier = 1.1;
     chatGPT.amt = 0;
     chatGPT.desc = `+100 Auto Clicks\nCost: ${chatGPT.price} chars`;
     chatGPT.text = `${chatGPT.name} x${chatGPT.amt}`
     chatGPT.click = function() {
         autoClicksPerSecond += 100;
-        chatGPT.amt++;
+        chatGPT.desc = `+100 Auto Clicks\nCost: ${chatGPT.price} chars`;
     }
 
     // Misc. upgrades
     rageMode = new upgrade.Sprite(upgradesX, height/6 + 9 * (upgradesYIndent + upgradesH));
     rageMode.name = "Rage";
-    rageMode.price = 500;
+    rageMode.price = 50000;
     rageMode.amt = 0;
     rageMode.desc = `Chance for a 10s boost(One-Time Purchase)\nCost: ${rageMode.price} chars`;
     rageMode.text = `${rageMode.name} x${rageMode.amt}`;
     rageMode.click = function() {
         rageModeOn = true;
-        rageMode.amt++;
         rageMode.locked = true;
     }
 
@@ -242,7 +243,6 @@ function setup() {
     codeReview.text = `${codeReview.name} x${codeReview.amt}`;
     codeReview.click = function() {
         negativeEventChance *= 0.3;
-        codeReview.amt++;
         codeReview.locked = true;
     }
 }
@@ -342,9 +342,11 @@ function draw() {
             }
             if (currentUpgrade.mouse.pressed()) {
                 deletedChars -= currentUpgrade.price;
-                currentUpgrade.click();
-                //currentUpgrade.price *= currentUpgrade.priceMultiplier;
+                currentUpgrade.amt++;
+                currentUpgrade.price = round(currentUpgrade.price * currentUpgrade.priceMultiplier);  
+                currentUpgrade.priceMultiplier *= random(1, currentUpgrade.priceMultiplier); 
                 currentUpgrade.text = `${currentUpgrade.name} x${currentUpgrade.amt}`;
+                currentUpgrade.click();
             }
         } else {
             currentUpgrade.color = color(200);
