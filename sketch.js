@@ -24,7 +24,7 @@ let rageModeChance = 0.1;
 let negativeEventChance = 0.05;
 
 // Variable to keep track of deleted characters
-var deletedChars = 50;
+var deletedChars = 0;
 
 // Variables for upgrades
 var autoClicksPerSecond = 0;
