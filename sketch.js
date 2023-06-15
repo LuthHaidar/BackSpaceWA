@@ -1,6 +1,3 @@
-//credit to emily xie for the matrix background
-//https://editor.p5js.org/cg3320/sketches/Hk4f_Jg9Q
-//i updated it to use ES6 classes and fixed some bugs
 let streams = [];
 const fadeInterval = 1.4;
 const symbolSize = 15;
@@ -16,10 +13,12 @@ const upgradesYIndent = 10;
 const upgradesW = 120;
 const upgradesH = 50;
 
-let rageModeOn = false;
+let rageModeActive = true;
+let rageModeUnlocked = false;
 let rageModeTimer = 0;
 let rageModeTime = 1800;
 let rageModeChance = 0.1;
+let rageModeMultiplier = 1;
 
 let negativeEventChance = 0.05;
 
@@ -30,6 +29,9 @@ var deletedChars = 0;
 var autoClicksPerSecond = 0;
 var userClickMultiplier = 1;
 
+//credit to emily xie for the matrix background
+//https://editor.p5js.org/cg3320/sketches/Hk4f_Jg9Q
+//i updated it to use ES6 classes and fixed some bugs
 class SymbolObj {
     constructor(x, y, speed, first, opacity) {
       this.x = x;
@@ -95,7 +97,7 @@ class SymbolObj {
 function setup() {
     createCanvas(windowWidth, windowHeight);
     background(255);
-        textFont('Consolas');
+    textFont('Consolas');
 
     let x = 0;
     for (let i = 0; i <= width / symbolSize; i++) {
@@ -187,7 +189,7 @@ function setup() {
         macro.desc = `+10 Auto Clicks per second \n Cost: ${macro.price} chars`;
     }
 
-    pyGUI = new upgrade.Sprite(upgradesX, height/6 + 6 * (upgradesYIndent + upgradesH));
+    pyGUI = new upgrade.Sprite(width - upgradesX, height/6);
     pyGUI.name = "pyGUI";
     pyGUI.price = 2000;
     pyGUI.priceMultiplier = 1.3;
@@ -199,7 +201,7 @@ function setup() {
         pyGUI.desc = `+25 Auto Clicks\nCost: ${pyGUI.price} chars`;
     }
 
-    unpaidIntern = new upgrade.Sprite(upgradesX, height/6 + 7 * (upgradesYIndent + upgradesH));
+    unpaidIntern = new upgrade.Sprite(width - upgradesX, height/6 + (upgradesYIndent + upgradesH));
     unpaidIntern.name = "UnpaidIntern";
     unpaidIntern.price = 50000;
     unpaidIntern.priceMultiplier = 1.2;
@@ -211,7 +213,7 @@ function setup() {
         unpaidIntern.desc = `+50 Auto Clicks\nCost: ${unpaidIntern.price} chars`;
     }
 
-    chatGPT = new upgrade.Sprite(upgradesX, height/6 + 8 * (upgradesYIndent + upgradesH));
+    chatGPT = new upgrade.Sprite(width - upgradesX, height/6 + 2 * (upgradesYIndent + upgradesH));
     chatGPT.name = "ChatGPT";
     chatGPT.price = 100000;
     chatGPT.priceMultiplier = 1.1;
@@ -223,19 +225,18 @@ function setup() {
         chatGPT.desc = `+100 Auto Clicks\nCost: ${chatGPT.price} chars`;
     }
 
-    // Misc. upgrades
-    rageMode = new upgrade.Sprite(upgradesX, height/6 + 9 * (upgradesYIndent + upgradesH));
+    rageMode = new upgrade.Sprite(width - upgradesX, height/6 + 3 * (upgradesYIndent + upgradesH));
     rageMode.name = "Rage";
     rageMode.price = 50000;
     rageMode.amt = 0;
     rageMode.desc = `Chance for a 10s boost(One-Time Purchase)\nCost: ${rageMode.price} chars`;
     rageMode.text = `${rageMode.name} x${rageMode.amt}`;
     rageMode.click = function() {
-        rageModeOn = true;
-        rageMode.locked = true;
+      rageModeUnlocked = true;
+      rageMode.locked = true;
     }
 
-    codeReview = new upgrade.Sprite(upgradesX, height/6 + 10 * (upgradesYIndent + upgradesH));
+    codeReview = new upgrade.Sprite(width - upgradesX, height/6 + 4 * (upgradesYIndent + upgradesH));
     codeReview.name = "CodeReview";
     codeReview.price = 100;
     codeReview.amt = 0;
@@ -254,7 +255,7 @@ function preload() {
 
 function animateBackspace() {
     if (kb.presses('backspace') || backspace.mouse.pressed()) {
-        deletedChars += userClickMultiplier;
+        deletedChars += userClickMultiplier * rageModeMultiplier;
         let targetScale = backspaceScale - 0.1;
         let duration = 10;
         let startTime = millis();
@@ -317,19 +318,47 @@ function draw() {
       stream.render();
     });
 
-    if (frameCount % 60 == 0) {
-        deletedChars += autoClicksPerSecond;
+    if (rageModeUnlocked && !rageModeActive) {
+      if (frameCount % 1800 == 0 && random() > 0.1) {
+        rageModeActive = true;
+        rageModeTimer = 0;
+      }
     }
+
+    if (rageModeActive) {
+      if (rageModeTimer < rageModeTime) {
+        rageModeTimer++;
+        translate(random(-5, 5), random(-5, 5))
+        rageModeMultiplier = 10;
+        fill(255, 140, 170, 150)
+        textSize(80);
+        textAlign(CENTER, CENTER);
+        text("RAGE MODE", width/2, height/7)
+      } else {
+        rageModeTimer = 0;
+        rageModeActive = false;
+        rageModeMultiplier = 1;
+      }
+    }
+    
+    if (frameCount % 60 == 0) {
+        deletedChars += autoClicksPerSecond * rageModeMultiplier;
+    }
+
 
     for (let i = 0; i < upgrade.length; i++) {
         let currentUpgrade = upgrade[i];
-        currentUpgrade.x = width /10 
 
         if (currentUpgrade.locked) {
             if (currentUpgrade.mouse.hovering()) {
                 currentUpgrade.color = color(255, 100, 100);
+                let textW = textWidth(currentUpgrade.desc);
+                let textX = mouseX + currentUpgrade.width;
+                if (textX + textW > width) {
+                    textX = mouseX - textW;
+                }
                 fill(0);
-                text(`LOCKED\n${currentUpgrade.desc}`, mouseX + currentUpgrade.width, mouseY);
+                text(`LOCKED\n${currentUpgrade.desc}`, textX, mouseY);
             } else {
                 currentUpgrade.color = color(200, 150, 150);
             }
@@ -337,8 +366,13 @@ function draw() {
             currentUpgrade.color = color(150, 200, 150);
             if (currentUpgrade.mouse.hovering()) {
                 currentUpgrade.color = color(100, 255, 100);
+                let textW = textWidth(currentUpgrade.desc);
+                let textX = mouseX + currentUpgrade.width;
+                if (textX + textW > width) {
+                    textX = mouseX - textW;
+                }
                 fill(0);
-                text(currentUpgrade.desc, mouseX + currentUpgrade.width, mouseY);
+                text(currentUpgrade.desc, textX, mouseY);
             }
             if (currentUpgrade.mouse.pressed()) {
                 deletedChars -= currentUpgrade.price;
@@ -352,8 +386,13 @@ function draw() {
             currentUpgrade.color = color(200);
             if (currentUpgrade.mouse.hovering()) {
                 currentUpgrade.color = color(150);
+                let textW = textWidth(currentUpgrade.desc);
+                let textX = mouseX + currentUpgrade.width;
+                if (textX + textW > width) {
+                    textX = mouseX - textW;
+                }
                 fill(0);
-                text(`Not enough chars\n${currentUpgrade.desc}`, mouseX + currentUpgrade.width, mouseY);
+                text(`Not enough chars\n${currentUpgrade.desc}`, textX, mouseY);
             }
         }
     }
@@ -364,7 +403,7 @@ function draw() {
     textAlign(CENTER, CENTER);
     text(`${compressNumber(deletedChars)} Chars`, width / 2, height / 2 - backspaceH);
     textSize(24);
-    text(`${compressNumber(autoClicksPerSecond)} per second`, width / 2, height / 2 - backspaceH / 1.5);
+    text(`${compressNumber(autoClicksPerSecond * rageModeMultiplier)} per second`, width / 2, height / 2 - backspaceH / 1.5);
     textSize(14);
     textAlign(LEFT, LEFT);
 }
