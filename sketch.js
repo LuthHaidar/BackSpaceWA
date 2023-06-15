@@ -13,7 +13,7 @@ const upgradesYIndent = 10;
 const upgradesW = 120;
 const upgradesH = 50;
 
-let rageModeActive = true;
+let rageModeActive = false;
 let rageModeUnlocked = false;
 let rageModeTimer = 0;
 let rageModeTime = 1800;
