@@ -1,21 +1,26 @@
-let backspace, backspaceImage, backspaceX, backspaceY;
-const backspaceImagePath = `backspace.png`;
+let backspace, backspaceX, backspaceY, backspaceInitialPosX, backspaceInitialPosY;
 const backspaceW = 355;
 const backspaceH = 142;
 const backspaceScale = 0.7;
-
-function preload() {
-	backspaceImage = loadImage(backspaceImagePath);
-}
 
 function backspaceSetup() {
   backspace = new Sprite(width / 2, height / 2);
 	backspace.addImage(backspaceImage);
 	backspace.scale = backspaceScale;
+
+	backspace.InitialX = backspace.position.x;
+	backspace.InitialY = backspace.position.y; 
 }
 
 function animateBackspace() {
+	if (backspace.mouse.dragging() && gravityModeOn) {
+		backspace.moveTowards(mouse.x + backspace.mouse.x, mouse.y + backspace.mouse.y, 1);
+	  }
+
 	if (kb.presses('backspace') || backspace.mouse.pressed()) {
+		keyPress.playMode('restart');
+		keyPress.setVolume(0.5)
+		keyPress.play();
 		deletedChars += userClickMultiplier * rageModeMultiplier;
 		let targetScale = backspaceScale - 0.1;
 		let duration = 10;

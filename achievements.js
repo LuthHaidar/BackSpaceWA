@@ -1,65 +1,74 @@
-// Array to store the achieved achievements
-var achievedAchievements = [];
+var achievements = {
+  firstDelete: {
+    requirement: 1,
+    reward: "Confetti for your first delete!",
+    completed: false,
+  },
+  speedyDeleter: {
+    requirement: 100,
+    reward: "You're a speedy deleter!",
+    completed: false,
+  },
+  backspaceMaster: {
+    requirement: 1000,
+    reward: "Master of the backspace key!",
+    completed: false,
+  },
+  codeNinja: {
+    requirement: 5000,
+    reward: "You're a coding ninja!",
+    completed: false,
+  },
+  ultimateDeveloper: {
+    requirement: 10000,
+    reward: "Ultimate developer achieved!",
+    completed: false,
+  },
+};
 
-// Achievements
-var achievements = [
-  {
-    name: "Novice Deleter",
-    description: "Delete 1,000 characters",
-    target: 1000,
-    achieved: false,
-  },
-  {
-    name: "Master Deleter",
-    description: "Delete 10,000 characters",
-    target: 10000,
-    achieved: false,
-  },
-  {
-    name: "Swift Typist",
-    description: "Reach 5 auto-clicks per second",
-    target: 5,
-    achieved: false,
-  },
-  // Add more achievements as needed
-];
+let achievementTimer = 0;
+let achievementDuration = 600;
+let achievementOn = false;
 
-// Function to check and update achievements
 function checkAchievements() {
-  for (let i = 0; i < achievements.length; i++) {
-    let achievement = achievements[i];
-    if (!achievement.achieved && deletedChars >= achievement.target) {
-      achievement.achieved = true;
-      achievedAchievements.push(achievement);
-      showAchievement(achievement);
+  for (const achievement in achievements) {
+    const currentAchievement = achievements[achievement];
+    if (
+      !currentAchievement.completed &&
+      currentAchievement.requirement <= deletedChars
+    ) {
+      currentAchievement.completed = true;
+      fill(140, 170, 255, 200);
+      textAlign(CENTER, CENTER);
+      textSize(40);
+      text(currentAchievement.reward, width / 2, height / 7);
+      achievementOn = true;
     }
   }
 }
 
-// Function to display an achieved achievement
-function showAchievement(achievement) {
+function drawAchievements() {
+  if (achievementOn && achievementTimer < achievementDuration) {
+    achievementTimer++;
+    fill(140, 170, 255, 200);
+    textAlign(CENTER, CENTER);
+    textSize(30);
+    var lastCompletedAchievement;
+    for (var achievement in achievements) {
+      if (achievements[achievement].completed) {
+        lastCompletedAchievement = achievements[achievement];
+      }
+    }
+    text(lastCompletedAchievement.reward, width / 2, height / 7);
+    textSize(20);
+    text(
+      `${lastCompletedAchievement.requirement} characters deleted`,
+      width / 2,
+      height / 7 + 30
+    );
     confettiEffect();
-    // Create a toast element
-    var toast = document.createElement("div");
-    toast.className = "toast";
-    
-    // Create a title element for the achievement name
-    var title = document.createElement("h3");
-    title.innerText = achievement.name;
-    
-    // Create a description element for the achievement description
-    var description = document.createElement("p");
-    description.innerText = achievement.description;
-    
-    // Append the title and description to the toast element
-    toast.appendChild(title);
-    toast.appendChild(description);
-    
-    // Append the toast element to the document body
-    document.body.appendChild(toast);
-    
-    // After a delay, remove the toast element
-    setTimeout(function() {
-      toast.remove();
-    }, 3000); // Adjust the delay (in milliseconds) as needed
+  } else if (achievementOn && achievementTimer == achievementDuration) {
+    achievementTimer = 0;
+    achievementOn = false;
+  }
 }

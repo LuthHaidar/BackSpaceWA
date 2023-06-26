@@ -1,4 +1,8 @@
-let confettiColor = [], confetti = [];
+let confettiColor = [],
+  confetti = [];
+let confettiOn = false;
+let confettiTimer = 0;
+let confettiDuration = 180;
 
 class Confetti {
   constructor(x, y, s) {
@@ -17,7 +21,10 @@ class Confetti {
     fill(this.color);
     push();
     translate(this.x, this.y);
-    translate(this.amp * Math.sin(this.time * this.phase), this.speed * Math.cos(2 * this.time * this.phase));
+    translate(
+      this.amp * Math.sin(this.time * this.phase),
+      this.speed * Math.cos(2 * this.time * this.phase)
+    );
     rotate(this.time);
     rectMode(CENTER);
     scale(Math.cos(this.time / 4), Math.sin(this.time / 4));
@@ -37,9 +44,30 @@ class Confetti {
 }
 
 function confettiSetup() {
-  confettiColor = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
+  confettiColor = [
+    "#f44336",
+    "#e91e63",
+    "#9c27b0",
+    "#673ab7",
+    "#3f51b5",
+    "#2196f3",
+    "#03a9f4",
+    "#00bcd4",
+    "#009688",
+    "#4CAF50",
+    "#8BC34A",
+    "#CDDC39",
+    "#FFEB3B",
+    "#FFC107",
+    "#FF9800",
+    "#FF5722",
+  ];
   for (let i = 0; i < 500; i++) {
-    confetti[i] = new Confetti(random(0, width), random(-height, 0), random(-5, 5));
+    confetti[i] = new Confetti(
+      random(0, width),
+      random(-height, 0),
+      random(-5, 5)
+    );
   }
 }
 
@@ -48,7 +76,11 @@ function confettiEffect() {
     confetti[i].confettiDisplay();
 
     if (confetti[i].y > height) {
-      confetti[i] = new Confetti(random(0, width), random(-height, 0), random(-5, 5));
+      confetti[i] = new Confetti(
+        random(0, width),
+        random(-height, 0),
+        random(-5, 5)
+      );
     }
   }
 }
