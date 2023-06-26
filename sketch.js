@@ -22,6 +22,7 @@ function setup() {
   confettiSetup();
   backspaceSetup();
   upgradesSetup();
+  allSprites.collider = 'static';
 }
 
 function compressNumber(num) {

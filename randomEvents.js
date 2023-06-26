@@ -9,6 +9,8 @@ function gravityMode() {
 function checkGravityMode() {
   if (gravityModeOn && gravityModeTimer < gravityModeDuration) {
     world.gravity.y = 10;
+    allSprites.collider = 'dynamic';
+    boundarySetup.collider = 'static'
     gravityModeTimer++;
     fill(170, 255, 140, 200);
     textAlign(CENTER, CENTER);
@@ -24,11 +26,11 @@ function checkGravityMode() {
 function reverseGravityMode() {
   world.gravity.y = 0;
   backspace.collider = "static";
-  backspace.collider = "dynamic";
   backspace.position.x = backspace.InitialX;
   backspace.position.y = backspace.InitialY;
   for (let i = 0; i < upgrade.length; i++) {
     let currentUpgrade = upgrade[i];
+    currentUpgrade.collider = 'static';
     currentUpgrade.x = currentUpgrade.InitialX;
     currentUpgrade.y = currentUpgrade.InitialY;
   }
